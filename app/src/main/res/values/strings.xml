@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Global Search</string>
+    <string name="made_by">%1$s made by %2$s</string>
+    <string name="root_directory_path">Root directory path</string>
+    <string name="search">Search</string>
+    <string name="result">%1$d results</string>
+    <string name="line">Line %1$d</string>
+</resources>

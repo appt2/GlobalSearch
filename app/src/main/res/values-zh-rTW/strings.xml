@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">全域搜尋</string>
+    <string name="made_by">%1$s 應用程式由 %2$s 開發</string>
+    <string name="root_directory_path">目標資料夾路徑</string>
+    <string name="search">搜尋</string>
+    <string name="result">已找到 %1$d 個結果</string>
+    <string name="line">第 %1$d 行</string>
+</resources>
