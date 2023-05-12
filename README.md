@@ -8,10 +8,12 @@ Global Search is an open source project, and a simple Android application provid
 
 ## How to use this app?
 
+You can download the debug version from [Actions](https://github.com/BlueWhaleYT/GlobalSearch/actions).
+
 There are two inputs:
 
 1. Root directory path: is the target directory you want to start searching from.
-3. Search: the keyword text to be searched.
+2. Search: the keyword text to be searched.
 
 ## How this app inspires you?
 
