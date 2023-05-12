@@ -6,7 +6,7 @@ Global Search is an open source project, and a simple Android application provid
 
 ![screenshot1](screenshots/screenshot1.jpeg)
 
-## How to use this app?
+## How to use this app? 
 
 You can download the debug version from [Actions](https://github.com/BlueWhaleYT/GlobalSearch/actions).
 
