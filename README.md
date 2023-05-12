@@ -2,6 +2,10 @@
 
 Global Search is an open source project, and a simple Android application providing a function of searching keywords from the files globally.
 
+## Screenshots
+
+![screenshot1](screenshots/screenshot1.jpeg)
+
 ## How to use this app?
 
 There are two inputs:
