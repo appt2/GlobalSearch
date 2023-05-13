@@ -54,7 +54,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             super(view);
             tvFilePath = view.findViewById(R.id.tv_file_path);
             tvResult = view.findViewById(R.id.tv_result);
-            tvLineNumber = view.findViewById(R.id.tv_file_line_number);
+            tvLineNumber = view.findViewById(R.id.tv_line_number);
             imgFileIcon = view.findViewById(R.id.img_file_icon);
         }
     }

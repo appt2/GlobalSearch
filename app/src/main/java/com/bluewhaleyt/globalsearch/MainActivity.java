@@ -1,8 +1,10 @@
 package com.bluewhaleyt.globalsearch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 
 import com.bluewhaleyt.common.DynamicColorsUtil;
 import com.bluewhaleyt.common.PermissionUtil;
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private SearchResultAdapter adapter;
+
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +87,11 @@ public class MainActivity extends AppCompatActivity {
                                 int startIndex = line.toLowerCase().indexOf(query.toLowerCase());
                                 int endIndex = startIndex + query.length();
                                 SpannableString highlightedLine = new SpannableString(line);
-                                highlightedLine.setSpan(new ForegroundColorSpan(new DynamicColorsUtil(this).getColorPrimary()), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                                var color = new DynamicColorsUtil(this).getColorPrimary();
+                                highlightedLine.setSpan(new ForegroundColorSpan(color), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                highlightedLine.setSpan(new BackgroundColorSpan(ColorUtils.setAlphaComponent(color, 50)), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
                                 results.add(new SearchResult(
                                         file.getAbsolutePath(),
                                         file.getName(),
