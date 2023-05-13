@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bluewhaleyt.filemanagement.FileIconUtil;
+import com.bluewhaleyt.materialfileicon.core.FileIconHelper;
 
 import java.util.List;
 
@@ -37,8 +38,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         holder.tvResult.setText(result.getHighlightedContent());
         holder.tvLineNumber.setText(context.getString(R.string.line, result.getLineNumber()));
 
-        var fileIconHelper = new FileIconUtil(result.getFilePath(), "");
-        fileIconHelper.bindFileIcon(holder.imgFileIcon);
+        var fileIconHelper = new FileIconHelper(result.getFilePath());
+        fileIconHelper.setEnvironmentEnabled(true);
+        fileIconHelper.bindIcon(holder.imgFileIcon);
     }
 
     @Override

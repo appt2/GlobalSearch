@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.View;
 
 import com.bluewhaleyt.common.DynamicColorsUtil;
 import com.bluewhaleyt.common.PermissionUtil;
@@ -34,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private SearchResultAdapter adapter;
-
-    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +59,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void performSearch(String query) {
-        AsyncTask.execute(() -> {
-            List<SearchResult> results = new ArrayList<>();
-            File dir = new File(binding.etFilePath.getText().toString());
-            searchFiles(dir, query, results);
-            runOnUiThread(() -> {
-                adapter.setSearchResults(results);
-                binding.tvResultCount.setText(getString(R.string.result, adapter.getItemCount()));
+        if (!query.equals("")) {
+            binding.progressBar.setVisibility(View.VISIBLE);
+            AsyncTask.execute(() -> {
+                List<SearchResult> results = new ArrayList<>();
+                File dir = new File(binding.etFilePath.getText().toString());
+                searchFiles(dir, query, results);
+                runOnUiThread(() -> {
+                    adapter.setSearchResults(results);
+                    binding.tvResultCount.setText(getString(R.string.result, adapter.getItemCount()));
+                    binding.progressBar.setVisibility(View.GONE);
+                });
             });
-        });
+        }
     }
 
     private void searchFiles(File dir, String query, List<SearchResult> results) {
@@ -84,9 +87,9 @@ public class MainActivity extends AppCompatActivity {
                         while ((line = reader.readLine()) != null) {
                             content += line + "\n";
                             if (line.toLowerCase().contains(query.toLowerCase())) {
-                                int startIndex = line.toLowerCase().indexOf(query.toLowerCase());
+                                int startIndex = line.trim().toLowerCase().indexOf(query.toLowerCase());
                                 int endIndex = startIndex + query.length();
-                                SpannableString highlightedLine = new SpannableString(line);
+                                SpannableString highlightedLine = new SpannableString(line.trim());
 
                                 var color = new DynamicColorsUtil(this).getColorPrimary();
                                 highlightedLine.setSpan(new ForegroundColorSpan(color), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

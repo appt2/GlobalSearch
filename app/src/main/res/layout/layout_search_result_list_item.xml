@@ -56,7 +56,8 @@
                 android:layout_height="wrap_content"
                 android:text="result"
                 android:alpha=".8"
-                android:ellipsize="start"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:fontFamily="monospace"/>
 
         </LinearLayout>
