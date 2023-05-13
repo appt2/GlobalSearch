@@ -28,13 +28,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
     private SearchResultAdapter adapter;
+    private List<SearchResult> results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,20 +65,25 @@ public class MainActivity extends AppCompatActivity {
     private void performSearch(String query) {
         if (!query.equals("")) {
             binding.progressBar.setVisibility(View.VISIBLE);
+            results = new ArrayList<>();
+            Map<String, Integer> fileCounts = new HashMap<>();
+            runOnUiThread(() -> {
+                adapter.setSearchResults(results);
+                adapter.notifyDataSetChanged();
+            });
             AsyncTask.execute(() -> {
-                List<SearchResult> results = new ArrayList<>();
                 File dir = new File(binding.etFilePath.getText().toString());
-                searchFiles(dir, query, results);
+                searchFiles(dir, query, results, fileCounts);
                 runOnUiThread(() -> {
-                    adapter.setSearchResults(results);
-                    binding.tvResultCount.setText(getString(R.string.result, adapter.getItemCount()));
+                    adapter.notifyDataSetChanged();
+                    updateResultText(fileCounts.size(), results.size());
                     binding.progressBar.setVisibility(View.GONE);
                 });
             });
         }
     }
 
-    private void searchFiles(File dir, String query, List<SearchResult> results) {
+    private void searchFiles(File dir, String query, List<SearchResult> results, Map<String, Integer> fileCounts) {
         File[] files = dir.listFiles();
         if (files != null) {
             for (File file : files) {
@@ -95,13 +104,23 @@ public class MainActivity extends AppCompatActivity {
                                 highlightedLine.setSpan(new ForegroundColorSpan(color), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                                 highlightedLine.setSpan(new BackgroundColorSpan(ColorUtils.setAlphaComponent(color, 50)), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                                results.add(new SearchResult(
+                                SearchResult searchResult = new SearchResult(
                                         file.getAbsolutePath(),
                                         file.getName(),
                                         content,
                                         highlightedLine,
-                                        lineNumber)
+                                        lineNumber
                                 );
+                                int count = 0;
+                                if (fileCounts.containsKey(file.getAbsolutePath())) {
+                                    count = fileCounts.get(file.getAbsolutePath());
+                                }
+                                fileCounts.put(file.getAbsolutePath(), count + 1);
+                                runOnUiThread(() -> {
+                                    results.add(searchResult);
+                                    adapter.notifyItemInserted(results.indexOf(searchResult));
+                                    updateResultText(fileCounts.size(), results.size());
+                                });
                             }
                             lineNumber++;
                         }
@@ -110,10 +129,17 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else if (file.isDirectory()) {
-                    searchFiles(file, query, results);
+                    searchFiles(file, query, results, fileCounts);
                 }
             }
         }
+    }
+
+    private void updateResultText(int numFiles, int numResults) {
+        binding.tvResultCount.setText(
+                getString(R.string.result, numResults) +
+                " (" + getString(R.string.files, numFiles) + ")"
+        );
     }
 
     private void setupSearchResultList() {

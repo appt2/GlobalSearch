@@ -5,4 +5,5 @@
     <string name="search">Search</string>
     <string name="result">%1$d results</string>
     <string name="line">Line %1$d</string>
+    <string name="files">%1$d files</string>
 </resources>

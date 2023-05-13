@@ -5,4 +5,5 @@
     <string name="search">搜尋</string>
     <string name="result">已找到 %1$d 個結果</string>
     <string name="line">第 %1$d 行</string>
+    <string name="files">%1$d 個檔案</string>
 </resources>
