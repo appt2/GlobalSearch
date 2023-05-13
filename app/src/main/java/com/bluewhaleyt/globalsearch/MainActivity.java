@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -19,9 +20,11 @@ import android.view.View;
 
 import com.bluewhaleyt.common.DynamicColorsUtil;
 import com.bluewhaleyt.common.PermissionUtil;
+import com.bluewhaleyt.component.dialog.DialogUtil;
 import com.bluewhaleyt.crashdebugger.CrashDebugger;
 import com.bluewhaleyt.filemanagement.FileUtil;
 import com.bluewhaleyt.globalsearch.databinding.ActivityMainBinding;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,6 +34,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,6 +64,18 @@ public class MainActivity extends AppCompatActivity {
         binding.btnSearch.setOnClickListener(v -> performSearch(binding.etSearch.getText().toString()));
 
         binding.etFilePath.setText(FileUtil.getExternalStoragePath() + "/WhaleUtils/");
+
+        adapter.setOnItemClickListener((view, result) -> {
+            var color = new DynamicColorsUtil(this).getColorPrimary();
+            var hc = result.getHighlightedContent();
+            hc.setSpan(new ForegroundColorSpan(color), result.getStartIndex(), result.getEndIndex(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            hc.setSpan(new BackgroundColorSpan(ColorUtils.setAlphaComponent(color, 20)), result.getStartIndex(), result.getEndIndex(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(result.getFileName())
+                    .setMessage(hc)
+                    .create().show();
+        });
 
     }
 
@@ -102,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 var color = new DynamicColorsUtil(this).getColorPrimary();
                                 highlightedLine.setSpan(new ForegroundColorSpan(color), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                highlightedLine.setSpan(new BackgroundColorSpan(ColorUtils.setAlphaComponent(color, 50)), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                highlightedLine.setSpan(new BackgroundColorSpan(ColorUtils.setAlphaComponent(color, 20)), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                                 SearchResult searchResult = new SearchResult(
                                         file.getAbsolutePath(),
@@ -111,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
                                         highlightedLine,
                                         lineNumber
                                 );
+                                searchResult.setStartIndex(startIndex);
+                                searchResult.setEndIndex(endIndex);
                                 int count = 0;
                                 if (fileCounts.containsKey(file.getAbsolutePath())) {
                                     count = fileCounts.get(file.getAbsolutePath());

@@ -9,6 +9,9 @@ public class SearchResult {
     private final SpannableString highlightedContent;
     private final int lineNumber;
 
+    private int startIndex;
+    private int endIndex;
+
     public SearchResult(String filePath, String fileName, String content, SpannableString highlightedContent, int lineNumber) {
         this.filePath = filePath;
         this.fileName = fileName;
@@ -35,5 +38,21 @@ public class SearchResult {
 
     public int getLineNumber() {
         return lineNumber;
+    }
+
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
+
+    public int getStartIndex() {
+        return startIndex;
+    }
+
+    public void setEndIndex(int endIndex) {
+        this.endIndex = endIndex;
+    }
+
+    public int getEndIndex() {
+        return endIndex;
     }
 }
