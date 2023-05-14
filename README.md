@@ -4,7 +4,7 @@ Global Search is an open source project, and a simple Android application provid
 
 ## Screenshots
 
-![screenshot1](screenshots/screenshot1.jpeg)
+![screenshot1](screenshots/screenshot2.jpeg)
 
 ## How to use this app? 
 
