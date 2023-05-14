@@ -58,7 +58,9 @@
             android:text="@string/search"
             android:layout_marginBottom="10dp"
             android:drawableLeft="@drawable/ic_baseline_search_24"
-            android:drawableTint="?colorOnPrimary"/>
+            android:drawableTint="?colorOnPrimary"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"/>
 
         <TextView
             android:id="@+id/tv_result_count"

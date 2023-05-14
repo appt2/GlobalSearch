@@ -3,11 +3,14 @@ package com.bluewhaleyt.globalsearch;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import android.animation.LayoutTransition;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -17,7 +20,9 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.bluewhaleyt.common.CommonUtil;
 import com.bluewhaleyt.common.DynamicColorsUtil;
 import com.bluewhaleyt.common.PermissionUtil;
 import com.bluewhaleyt.component.dialog.DialogUtil;
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         CrashDebugger.init(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        setupAppearance();
 
         binding.tvMadeBy.setText(getString(R.string.made_by, "❤️", "BlueWhaleYT"));
 
@@ -84,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void performSearch(String query) {
+        binding.tvResultCount.setText("");
         if (!query.equals("")) {
             binding.progressBar.setVisibility(View.VISIBLE);
             results = new ArrayList<>();
@@ -170,5 +177,12 @@ public class MainActivity extends AppCompatActivity {
         var rvList = binding.rvResult;
         rvList.setLayoutManager(new LinearLayoutManager(this));
         rvList.setAdapter(adapter);
+    }
+
+    private void setupAppearance() {
+        var color = CommonUtil.SURFACE_FOLLOW_WINDOW_BACKGROUND;
+        CommonUtil.setStatusBarColorWithSurface(this, color);
+        CommonUtil.setNavigationBarColorWithSurface(this, color);
+        CommonUtil.setToolBarColorWithSurface(this, color);
     }
 }
