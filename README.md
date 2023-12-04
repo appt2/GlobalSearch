@@ -1,4 +1,4 @@
-# Global Search 全域搜尋
+ # Global Search 全域搜尋
 
 Global Search is an open source project, and a simple Android application providing a function of searching keywords from the files globally.
 
